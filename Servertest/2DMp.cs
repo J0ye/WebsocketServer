@@ -19,6 +19,10 @@ namespace Servertest
             {
                 SetNewPos(msg);
             }
+            else if(msg.Contains("Get:"))
+            {
+                ReturnData(msg);
+            }            
         }
 
         protected override void OnOpen()
@@ -45,6 +49,41 @@ namespace Servertest
             target.SetPos(xPos, yPos);
         }
 
+        protected void ReturnData(string msg)
+        {
+            var stringArray = msg.Split(":".ToCharArray());
+            Guid guid = Guid.Parse(stringArray[1]);
+
+            Send("Players:" + GetPlayerListAsString(guid));
+        }
+
+        // Returns a list of every player but as a string
+        protected string GetPlayerListAsString(Guid target)
+        {
+            string val = "";
+            foreach (Player p in players)
+            {
+                if(p.id != target)
+                {
+                    val += p.GetPlayer() + "%";
+                }
+            }
+
+            return val;
+        }
+
+        // Returns the list of all the players as a string
+        protected string GetPlayerListAsString()
+        {
+            string val = "";
+            foreach(Player p in players)
+            {
+                val += p.GetPlayer() + "%";
+            }
+
+            return val;
+        }
+
         protected Player FindPlayer(Guid id)
         {
             foreach(Player p in players)
@@ -54,7 +93,7 @@ namespace Servertest
                     return p;
                 }
             }
-            Console.WriteLine("The player with the id: " + id + " does not exist but the programm is still trying to find him.");
+            Console.WriteLine("Error: The player with the id: " + id + " does not exist but the programm is still trying to find him.");
             return players[0];
         }
     }
@@ -86,6 +125,13 @@ namespace Servertest
         {
             pos = new float[] { x, y };
             Console.WriteLine(id + "s new Pos: " + pos[0] + "/" + pos[1]);
+        }
+
+        public string GetPlayer()
+        {
+            string _id = this.id.ToString();
+            string _pos = this.pos.ToString();
+            return _id + "!" + _pos;
         }
     }
 }
