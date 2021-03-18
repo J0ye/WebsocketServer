@@ -1,6 +1,7 @@
 ﻿using System;
 using WebSocketSharp;
 using WebSocketSharp.Server;
+using Servertest.Models;
 using Servertest;
 
 namespace Example
@@ -26,6 +27,11 @@ namespace Example
         {
             var wssv = new WebSocketServer(9000);
             wssv.AddWebSocketService<_2DMp>("/2dmp");
+            for(int i = 0; i <= 20; i++)
+            {
+                wssv.AddWebSocketService<_2DMp>("/2dmp" + i);
+            }
+            new Data();
             wssv.Start();
             Console.ReadKey(true);
             wssv.Stop();

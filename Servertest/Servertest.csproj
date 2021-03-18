@@ -43,7 +43,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="2DMp.cs" />
+    <Compile Include="Data\Vector3List.cs" />
+    <Compile Include="Data\BaseList.cs" />
+    <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\Data.cs" />
+    <Compile Include="Models\Player.cs" />
+    <Compile Include="Models\Vector3.cs" />
     <Compile Include="Programm.cs" />
+    <Compile Include="Behaviours\Vector3Behaviour.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

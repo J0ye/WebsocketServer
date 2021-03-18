@@ -4,13 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebSocketSharp;
+using Servertest.Models;
 using WebSocketSharp.Server;
 
 namespace Servertest
 {
     class _2DMp : WebSocketBehavior
     {
-        public List<Player> players = new List<Player>();
+
+        protected override void OnOpen()
+        {
+            Player newPlayer = new Player();
+            //players.Add(newPlayer);
+            Models.Data.Instance().AddPlayer(newPlayer);
+            var msg = "ID: " + newPlayer.id;
+            Send(msg);
+        }
+
         protected override void OnMessage(MessageEventArgs e)
         {
             var msg = System.Text.Encoding.UTF8.GetString(e.RawData);
@@ -22,16 +32,11 @@ namespace Servertest
             else if(msg.Contains("Get:"))
             {
                 ReturnData(msg);
-            }            
-        }
-
-        protected override void OnOpen()
-        {
-            Console.WriteLine("New Player");
-            Player newPlayer = new Player();
-            players.Add(newPlayer);
-            var msg = "ID: " + newPlayer.id;
-            Send(msg);
+            }
+            else if (msg.Contains("Delete:"))
+            {
+                DeletePlayer(msg);
+            }
         }
 
         protected void SetNewPos(string msg)
@@ -46,47 +51,25 @@ namespace Servertest
             Player target = FindPlayer(guid);
             float xPos = float.Parse(x);
             float yPos = float.Parse(y);
-            target.SetPos(xPos, yPos);
+            target.SetPos(xPos, yPos, 0);
         }
 
         protected void ReturnData(string msg)
         {
-            var stringArray = msg.Split(":".ToCharArray());
-            Guid guid = Guid.Parse(stringArray[1]);
+            Guid guid = ParseGuidDefault(msg);
 
-            Send("Players:" + GetPlayerListAsString(guid));
+            Send("Players:" + Models.Data.Instance().GetPlayerListAsString(guid));
         }
 
-        // Returns a list of every player but as a string
-        protected string GetPlayerListAsString(Guid target)
+        protected void DeletePlayer(string msg)
         {
-            string val = "";
-            foreach (Player p in players)
-            {
-                if(p.id != target)
-                {
-                    val += p.GetPlayer() + "%";
-                }
-            }
-
-            return val;
-        }
-
-        // Returns the list of all the players as a string
-        protected string GetPlayerListAsString()
-        {
-            string val = "";
-            foreach(Player p in players)
-            {
-                val += p.GetPlayer() + "%";
-            }
-
-            return val;
+            Guid guid = ParseGuidDefault(msg);
+            Models.Data.Instance().RemovePlayer(guid);
         }
 
         protected Player FindPlayer(Guid id)
         {
-            foreach(Player p in players)
+            foreach(Player p in Models.Data.Instance().GetPlayers())
             {
                 if(p.id == id)
                 {
@@ -94,44 +77,16 @@ namespace Servertest
                 }
             }
             Console.WriteLine("Error: The player with the id: " + id + " does not exist but the programm is still trying to find him.");
-            return players[0];
-        }
-    }
-
-    public class Program
-    {
-        /*public static void Main(string[] args)
-        {
-            var wssv = new WebSocketServer(9000);
-            wssv.AddWebSocketService<_2DMp>("/2dmp");
-            wssv.Start();
-            Console.ReadKey(true);
-            wssv.Stop();
-        }*/
-    }
-
-    public class Player
-    {
-        public Guid id;
-        public float[] pos;
-
-        public Player()
-        {
-            id = Guid.NewGuid();
-            pos = new float[] { 0f, 0f};
+            return Models.Data.Instance().GetPlayers()[0];
         }
 
-        public void SetPos(float x, float y)
+        // Parses a string  to a guid and returns. Only works for a string with this format: Command:Guid
+        // The command will be ignored
+        protected Guid ParseGuidDefault(string msg)
         {
-            pos = new float[] { x, y };
-            Console.WriteLine(id + "s new Pos: " + pos[0] + "/" + pos[1]);
-        }
-
-        public string GetPlayer()
-        {
-            string _id = this.id.ToString();
-            string _pos = this.pos.ToString();
-            return _id + "!" + _pos;
+            var stringArray = msg.Split(":".ToCharArray());
+            Guid guid = Guid.Parse(stringArray[1]);
+            return guid;
         }
     }
 }
