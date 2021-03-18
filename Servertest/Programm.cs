@@ -1,8 +1,8 @@
 ﻿using System;
 using WebSocketSharp;
 using WebSocketSharp.Server;
-using Servertest.Models;
-using Servertest;
+using WebsocketServer.Models;
+using WebsocketServer;
 
 namespace Example
 {

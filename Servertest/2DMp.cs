@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebSocketSharp;
-using Servertest.Models;
+using WebsocketServer.Models;
 using WebSocketSharp.Server;
 
-namespace Servertest
+namespace WebsocketServer
 {
     class _2DMp : WebSocketBehavior
     {

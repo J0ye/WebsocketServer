@@ -8,7 +8,7 @@ using WebSocketSharp;
 
 
 
-namespace Servertest
+namespace WebsocketServer
 {
     class Vector3Behaviour : WebSocketBehavior
     {

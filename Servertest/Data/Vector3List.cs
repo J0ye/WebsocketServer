@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Servertest.Models;
+using WebsocketServer.Models;
 
-namespace Servertest.Data
+namespace WebsocketServer.Data
 {
     public sealed class Vector3List : BaseList<Vector3>
     {

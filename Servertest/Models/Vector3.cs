@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Servertest.Models
+namespace WebsocketServer.Models
 {
     public class Vector3 : BaseModel
     {

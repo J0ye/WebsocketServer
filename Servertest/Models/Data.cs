@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Servertest;
+using WebsocketServer;
 
-namespace Servertest.Models
+namespace WebsocketServer.Models
 {
     public sealed class Data
     {
