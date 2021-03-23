@@ -8,12 +8,11 @@ namespace WebsocketServer.Models
 {
     public abstract class BaseList<T> where T : BaseModel 
     {
-        public List<T> List 
+        protected List<T> List = new List<T>();
+
+        public List<T> GetList()
         {
-            get
-            {
-                return List;
-            }
+            return List;
         }
 
         public void AddEntry(T target)
@@ -35,7 +34,43 @@ namespace WebsocketServer.Models
             return false;
         }
 
-        public abstract string GetListAsString();
-        public abstract string GetListAsString(Guid target);
+        public virtual T FindEntry(Guid target)
+        {
+            foreach (T t in List)
+            {
+                if (t.guid == target)
+                {
+                    return t;
+                }
+            }
+            Console.WriteLine("Error: The server is trying to delete an entry that does not exist from a list. Target: " + target);
+            return List[0];
+        }
+
+        public virtual string GetListAsString()
+        {
+            string val = "";
+
+            foreach (T v in List)
+            {
+                val += v.guid + "%";
+            }
+
+            return val;
+        }
+        public virtual string GetListAsString(Guid target)
+        {
+            string val = "";
+
+            foreach (T v in List)
+            {
+                if(v.guid != target)
+                {
+                    val += v.guid + "%";
+                }
+            }
+
+            return val;
+        }
     }
 }

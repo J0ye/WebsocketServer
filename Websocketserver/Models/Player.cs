@@ -7,14 +7,13 @@ using WebsocketServer.Models;
 
 namespace WebsocketServer
 {
-    public class Player
+    public class Player : BaseModel
     {
-        public Guid id;
         public Vector3 pos;
 
         public Player()
         {
-            id = Guid.NewGuid();
+            guid = Guid.NewGuid();
             pos = new Vector3();
         }
 
@@ -25,9 +24,9 @@ namespace WebsocketServer
             pos.z = z;
         }
 
-        public string GetPlayer()
+        public string GetPlayerAsString()
         {
-            string _id = id.ToString();
+            string _id = guid.ToString();
             string _pos = pos.x + "/" + pos.y + "/" + pos.z;
             return _id + "!" + _pos;
         }
