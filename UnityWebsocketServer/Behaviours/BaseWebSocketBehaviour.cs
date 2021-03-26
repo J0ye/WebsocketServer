@@ -16,6 +16,7 @@ namespace WebsocketServer
             Player newPlayer = new Player();
             PlayerList.Instance().AddEntry(newPlayer);
             var msg = "ID: " + newPlayer.guid;
+            Console.WriteLine("New connection. Returned ID: " + newPlayer.guid);
             Send(msg);
         }
 
@@ -65,6 +66,7 @@ namespace WebsocketServer
         protected void DeletePlayer(string msg)
         {
             Guid guid = ParseGuidDefault(msg);
+            Console.WriteLine("Player " + guid + " is closing the connection. Good bye.");
             PlayerList.Instance().RemoveEntry(guid);
         }
 

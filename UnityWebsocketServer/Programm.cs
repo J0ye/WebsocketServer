@@ -29,6 +29,7 @@ namespace Example
             wssv.AddWebSocketService<_2DMp>("/2dmp");
             wssv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
             new PlayerList();
+            Console.WriteLine("Server started.");
             wssv.Start();
             Console.ReadKey(true);
             wssv.Stop();
