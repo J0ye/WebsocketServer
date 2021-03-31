@@ -12,9 +12,9 @@ namespace Example
         protected override void OnMessage(MessageEventArgs e)
         {
             var msg = System.Text.Encoding.UTF8.GetString(e.RawData);
-            Console.WriteLine("Got Message: " + msg);
+            Console.WriteLine("Got Message: " + msg + ". Returing raw");
             string response = msg;
-            Send(response);
+            Send(e.RawData);
         }
     }
     
@@ -39,7 +39,8 @@ namespace Example
             wssv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
             wssv.AddWebSocketService<Echo>("/echo");
             new PlayerList();
-            Console.WriteLine("Server started.");
+            Console.WriteLine("Server started");
+            Console.WriteLine(".Net Version: {0}", Environment.Version.ToString());
             wssv.Start();
             Console.ReadKey(true);
             wssv.Stop();

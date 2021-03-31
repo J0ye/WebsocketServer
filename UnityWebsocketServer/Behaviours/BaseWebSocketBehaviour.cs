@@ -78,6 +78,12 @@ namespace WebsocketServer
             PlayerList.Instance().RemoveEntry(guid);
         }
 
+        protected new void Send(string data)
+        {
+            byte[] msg = Encoding.UTF8.GetBytes(data);
+            Send(msg);
+        }
+
         // Parses a string  to a guid and returns. Only works for a string with this format: Command:Guid
         // The command will be ignored
         protected Guid ParseGuidDefault(string msg)
