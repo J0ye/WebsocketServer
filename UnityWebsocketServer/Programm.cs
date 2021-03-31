@@ -3,6 +3,7 @@ using WebSocketSharp;
 using WebSocketSharp.Server;
 using WebsocketServer.Models;
 using WebsocketServer;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Example
 {
@@ -13,10 +14,6 @@ namespace Example
             var msg = System.Text.Encoding.UTF8.GetString(e.RawData);
             Console.WriteLine("Got Message: " + msg);
             string response = msg;
-            if(msg == "get")
-            {
-                response = "New info";
-            }
             Send(response);
         }
     }
@@ -25,9 +22,14 @@ namespace Example
     {
         public static void Main(string[] args)
         {
-            var wssv = new WebSocketServer(9000);
+            var wssv = new WebSocketServer(9000, true);
+
+            wssv.SslConfiguration.ServerCertificate =
+                new X509Certificate2("cert.pks");
+            wssv.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
             wssv.AddWebSocketService<_2DMp>("/2dmp");
             wssv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
+            wssv.AddWebSocketService<Echo>("/echo");
             new PlayerList();
             Console.WriteLine("Server started.");
             wssv.Start();

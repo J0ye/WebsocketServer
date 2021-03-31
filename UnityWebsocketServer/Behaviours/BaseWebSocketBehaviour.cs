@@ -28,6 +28,14 @@ namespace WebsocketServer
             {
                 SetNewPos(msg);
             }
+            else if (msg.Contains("Get guid"))
+            {
+                Player newPlayer = new Player();
+                PlayerList.Instance().AddEntry(newPlayer);
+                var ret = "ID: " + newPlayer.guid;
+                Console.WriteLine("New id for existing connection: " + newPlayer.guid);
+                Send(ret);
+            }
             else if (msg.Contains("Get:"))
             {
                 ReturnData(msg);
