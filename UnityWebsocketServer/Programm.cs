@@ -17,16 +17,24 @@ namespace Example
             Send(response);
         }
     }
-
+    
+    
     public class Program
-    {
+    {        private enum SslProtocolsHack
+        {
+            Tls = 192,
+            Tls11 = 768,
+            Tls12 = 3072
+        }
         public static void Main(string[] args)
         {
             var wssv = new WebSocketServer(9000, true);
 
+
             wssv.SslConfiguration.ServerCertificate =
                 new X509Certificate2("cert.pks");
-            wssv.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
+            var sslProtocolHack = (System.Security.Authentication.SslProtocols)(SslProtocolsHack.Tls12 | SslProtocolsHack.Tls11 | SslProtocolsHack.Tls);
+            wssv.SslConfiguration.EnabledSslProtocols = sslProtocolHack;
             wssv.AddWebSocketService<_2DMp>("/2dmp");
             wssv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
             wssv.AddWebSocketService<Echo>("/echo");
