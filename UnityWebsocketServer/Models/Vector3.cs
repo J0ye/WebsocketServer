@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebsocketServer.Models;
 
-namespace WebsocketServer.Models
+namespace WebsocketServer
 {
     public class Vector3 : BaseModel
     {

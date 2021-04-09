@@ -11,11 +11,13 @@ namespace WebsocketServer
 {
     class BaseWebSocketBehaviour : WebSocketBehavior
     {
+        Guid connectionID;
         protected override void OnOpen()
         {
             Player newPlayer = new Player();
             PlayerList.Instance().AddEntry(newPlayer);
             var msg = "ID: " + newPlayer.guid;
+            connectionID = newPlayer.guid;
             Console.WriteLine("New connection. Returned ID: " + newPlayer.guid);
             Send(msg);
         }
@@ -44,6 +46,16 @@ namespace WebsocketServer
             {
                 DeletePlayer(msg);
             }
+            else if(msg == "Ping")
+            {
+
+            }
+        }
+
+        protected override void OnClose(CloseEventArgs e)
+        {
+            PlayerList.Instance().RemoveEntry(connectionID);
+            base.OnClose(e);
         }
 
         // Message Format( Pos: Xpos/Ypos/Zpos/id )
@@ -64,14 +76,14 @@ namespace WebsocketServer
             target.SetPos(xPos, yPos, zPos);
         }
 
-        protected void ReturnData(string msg)
+        protected virtual void ReturnData(string msg)
         {
             Guid guid = ParseGuidDefault(msg);
 
             Send("Players:" + PlayerList.Instance().GetListAsString(guid));
         }
 
-        protected void DeletePlayer(string msg)
+        protected virtual void DeletePlayer(string msg)
         {
             Guid guid = ParseGuidDefault(msg);
             Console.WriteLine("Player " + guid + " is closing the connection. Good bye.");
@@ -86,7 +98,7 @@ namespace WebsocketServer
 
         // Parses a string  to a guid and returns. Only works for a string with this format: Command:Guid
         // The command will be ignored
-        protected Guid ParseGuidDefault(string msg)
+        protected virtual Guid ParseGuidDefault(string msg)
         {
             var stringArray = msg.Split(":".ToCharArray());
             Guid guid = Guid.Parse(stringArray[1]);

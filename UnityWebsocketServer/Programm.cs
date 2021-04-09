@@ -20,12 +20,14 @@ namespace Example
     
     
     public class Program
-    {        private enum SslProtocolsHack
+    {        
+        private enum SslProtocolsHack
         {
             Tls = 192,
             Tls11 = 768,
             Tls12 = 3072
         }
+
         public static void Main(string[] args)
         {
             var wssv = new WebSocketServer(9000, true);
@@ -38,6 +40,7 @@ namespace Example
             wssv.AddWebSocketService<_2DMp>("/2dmp");
             wssv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
             wssv.AddWebSocketService<Echo>("/echo");
+            wssv.AddWebSocketService<ChatBehaviour>("/chat");
             new PlayerList();
             Console.WriteLine("Server started");
             Console.WriteLine(".Net Version: {0}", Environment.Version.ToString());

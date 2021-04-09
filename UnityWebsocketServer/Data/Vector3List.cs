@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebsocketServer.Models;
 
-namespace WebsocketServer.Data
+namespace WebsocketServer
 {
     public sealed class Vector3List : BaseList<Vector3>
     {
