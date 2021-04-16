@@ -20,27 +20,26 @@ namespace WebsocketServer
             if (msg != "Ping")
             {
                 Console.WriteLine("Recieved chat message: " + msg);
-                Sessions.Broadcast(ToByteArray(msg));
+                Broadcast(msg);
             }
         }
 
         protected override void OnClose(CloseEventArgs e)
         {
             global.Instance().g_ChatMember--;
-            Console.WriteLine("User left. Number of users " + global.Instance().g_ChatMember);
             NotifyNumberOfUsers("left");
         }
 
         protected void NotifyNumberOfUsers(string verb)
         {
-            var msg = "User " + verb + " Number of users " + global.Instance().g_ChatMember;
-            Sessions.Broadcast(ToByteArray(msg));
+            var msg = "User " + verb + ". Number of users " + global.Instance().g_ChatMember;
+            Broadcast(msg);
         }
 
-        protected byte[] ToByteArray(string data)
+        protected void Broadcast(string data)
         {
             byte[] msg = Encoding.UTF8.GetBytes(data);
-            return msg;
+            Sessions.Broadcast(msg);
         }
     }
 }

@@ -31,6 +31,7 @@ namespace Example
         public static void Main(string[] args)
         {
             var wssv = new WebSocketServer(9000, true);
+            var wsv = new WebSocketServer(9001);
 
 
             wssv.SslConfiguration.ServerCertificate =
@@ -41,12 +42,20 @@ namespace Example
             wssv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
             wssv.AddWebSocketService<Echo>("/echo");
             wssv.AddWebSocketService<ChatBehaviour>("/chat");
+            wsv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
+            wsv.AddWebSocketService<Echo>("/echo");
+            wsv.AddWebSocketService<ChatBehaviour>("/chat");
             new PlayerList();
             Console.WriteLine("Server started");
             Console.WriteLine(".Net Version: {0}", Environment.Version.ToString());
+            Console.WriteLine("Press " + ConsoleKey.Enter + " to cancel");
+            wsv.Start();
             wssv.Start();
-            Console.ReadKey(true);
-            wssv.Stop();
+            if(Console.ReadKey().Key == ConsoleKey.Enter)
+            {
+                wssv.Stop();
+                wsv.Stop();
+            }
         }
     }
 }
