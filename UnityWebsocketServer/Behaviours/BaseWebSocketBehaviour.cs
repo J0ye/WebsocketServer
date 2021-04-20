@@ -19,6 +19,7 @@ namespace WebsocketServer
             connectionID = newPlayer.guid;
             Console.WriteLine("New connection. Returned ID: " + newPlayer.guid);
             Send(msg);
+            Broadcast("Update"); // Ask every user to send an update on their position
         }
 
         protected override void OnMessage(MessageEventArgs e)

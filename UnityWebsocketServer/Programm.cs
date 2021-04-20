@@ -51,7 +51,7 @@ namespace Example
             Console.WriteLine("Press " + ConsoleKey.Enter + " to cancel");
             wsv.Start();
             wssv.Start();
-            if(Console.ReadKey().Key == ConsoleKey.Enter)
+            if (Console.ReadKey().Key == ConsoleKey.Enter)
             {
                 wssv.Stop();
                 wsv.Stop();

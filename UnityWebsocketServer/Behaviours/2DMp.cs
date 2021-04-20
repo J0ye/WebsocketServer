@@ -12,7 +12,7 @@ namespace WebsocketServer
     class _2DMp : BaseWebSocketBehaviour
     {
         // Message Format( Pos: Xpos/Ypos/id )
-        protected override void SetNewPos(string msg)
+        protected void SetNewPos(string msg)
         {
             var stringArray = msg.Split(":".ToCharArray());
             stringArray = stringArray[1].Split("/".ToCharArray());
