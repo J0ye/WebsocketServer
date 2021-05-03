@@ -42,10 +42,9 @@ namespace Example
             wssv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
             wssv.AddWebSocketService<Echo>("/echo");
             wssv.AddWebSocketService<ChatBehaviour>("/chat");
-            wsv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
-            wsv.AddWebSocketService<Echo>("/echo");
-            wsv.AddWebSocketService<ChatBehaviour>("/chat");
+            wssv.AddWebSocketService<ScoreBehaviour>("/score");
             new PlayerList();
+            new ScoreList();
             Console.WriteLine("Server started");
             Console.WriteLine(".Net Version: {0}", Environment.Version.ToString());
             Console.WriteLine("Press " + ConsoleKey.Enter + " to cancel");
