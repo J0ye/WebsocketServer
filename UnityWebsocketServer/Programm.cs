@@ -36,8 +36,8 @@ namespace Example
 
             wssv.SslConfiguration.ServerCertificate =
                 new X509Certificate2("cert.pks");
-            var sslProtocolHack = (System.Security.Authentication.SslProtocols)(SslProtocolsHack.Tls12 | SslProtocolsHack.Tls11 | SslProtocolsHack.Tls);
-            wssv.SslConfiguration.EnabledSslProtocols = sslProtocolHack;
+            //var sslProtocolHack = (System.Security.Authentication.SslProtocols)(SslProtocolsHack.Tls12 | SslProtocolsHack.Tls11 | SslProtocolsHack.Tls);
+            wssv.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
             wssv.AddWebSocketService<_2DMp>("/2dmp");
             wssv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
             wssv.AddWebSocketService<Echo>("/echo");
