@@ -38,23 +38,25 @@ namespace Example
                 new X509Certificate2("cert.pks");
             var sslProtocolHack = (System.Security.Authentication.SslProtocols)(SslProtocolsHack.Tls12 | SslProtocolsHack.Tls11 | SslProtocolsHack.Tls);
             wssv.SslConfiguration.EnabledSslProtocols = sslProtocolHack;
-            wssv.AddWebSocketService<_2DMp>("/2dmp");
-            wssv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
-            wssv.AddWebSocketService<Echo>("/echo");
-            wssv.AddWebSocketService<ChatBehaviour>("/chat");
             wssv.AddWebSocketService<ScoreBehaviour>("/score");
-            new PlayerList();
+            wsv.AddWebSocketService<ScoreBehaviour>("/score");
             new ScoreList();
-            Console.WriteLine("Server started");
+            Console.WriteLine("Score Server started");
             Console.WriteLine(".Net Version: {0}", Environment.Version.ToString());
-            Console.WriteLine("Press " + ConsoleKey.Enter + " to cancel");
+            Console.WriteLine("Press any to stop");
+            Console.WriteLine("Add legacy scores");
+            ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "The Creator", 2017));
+            ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "st311", 1918));
+            ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "Cesd", 1018));
+            ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "felix", 1001));
+            ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "Frogman", 798));
+            ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "maggy", 420));
+            ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "Nice", 69));
             wsv.Start();
             wssv.Start();
-            if (Console.ReadKey().Key == ConsoleKey.Enter)
-            {
-                wssv.Stop();
-                wsv.Stop();
-            }
+            Console.Read();
+            wssv.Stop();
+            wsv.Stop();
         }
     }
 }
