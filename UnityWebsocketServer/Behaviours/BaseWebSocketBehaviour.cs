@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebSocketSharp;
 using WebsocketServer.Models;
 using WebSocketSharp.Server;
+using Msg;
 
 namespace WebsocketServer
 {
@@ -15,31 +16,23 @@ namespace WebsocketServer
         protected override void OnOpen()
         {
             Player newPlayer = new Player();
-            var msg = "ID: " + newPlayer.guid;
+            //var msg = "ID: " + newPlayer.guid;
             connectionID = newPlayer.guid;
+            IDMessage temp = new IDMessage(newPlayer.guid.ToString());
             Console.WriteLine("New connection. Returned ID: " + newPlayer.guid);
-            Send(msg);
+            Send(temp.ToJson());
             Broadcast("Update"); // Ask every user to send an update on their position
         }
 
         protected override void OnMessage(MessageEventArgs e)
         {
             var msg = System.Text.Encoding.UTF8.GetString(e.RawData);
-            if (msg.Contains("Pos:"))
+            if(msg == "Ping")
             {
-                Broadcast(msg);
+                return;
             }
-            else if (msg.Contains("Get guid"))
-            {
-                Player newPlayer = new Player();
-                PlayerList.Instance().AddEntry(newPlayer);
-                var ret = "ID: " + newPlayer.guid;
-                Console.WriteLine("New id for existing connection: " + newPlayer.guid);
-                Send(ret);
-            }
-            else if(msg == "Ping")
-            {
-            }
+            Console.WriteLine("Recieved Message: " + msg);
+            Broadcast(msg);
         }
 
         protected override void OnClose(CloseEventArgs e)
