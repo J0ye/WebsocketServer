@@ -21,12 +21,12 @@ namespace Example
     
     public class Program
     {        
-        private enum SslProtocolsHack
+        /*private enum SslProtocolsHack
         {
             Tls = 192,
             Tls11 = 768,
             Tls12 = 3072
-        }
+        }*/
 
         public static void Main(string[] args)
         {
@@ -45,8 +45,10 @@ namespace Example
             wsv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
             wsv.AddWebSocketService<Echo>("/echo");
             wsv.AddWebSocketService<ChatBehaviour>("/chat");
+
             wssv.AddWebSocketService<ScoreBehaviour>("/score");
             wsv.AddWebSocketService<ScoreBehaviour>("/score");
+
             new PlayerList();
             new ScoreList();
             Console.WriteLine("Server started");
@@ -60,6 +62,7 @@ namespace Example
             ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "Frogman", 798));
             ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "maggy", 420));
             ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "Nice", 69));
+
             wsv.Start();
             wssv.Start();
             if (Console.ReadKey().Key == ConsoleKey.Enter)

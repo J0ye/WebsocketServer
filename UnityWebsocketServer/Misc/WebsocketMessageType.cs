@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using WebsocketServer.Models;
 
 namespace Msg
 {
@@ -32,6 +33,16 @@ namespace Msg
         {
             type = WebsocketMessageType.Request;
             requestType = request;
+        }
+
+        public new static WebsocketRequest FromJson(string target)
+        {
+            return JsonConvert.DeserializeObject<WebsocketRequest>(target);
+        }
+
+        public override string ToJson()
+        {
+            return JsonConvert.SerializeObject(this);
         }
     }
 
@@ -72,6 +83,39 @@ namespace Msg
             {
                 throw new Exception("Script is trying to set the id of a PositionMessage to an invalid guid");
             }
+        }
+    }
+
+    public class PositionMessage : IDMessage
+    {
+        public WebsocketServer.Vector3 position;
+
+        public PositionMessage()
+        {
+            type = WebsocketMessageType.Position;
+        }
+        public PositionMessage(Guid id, WebsocketServer.Vector3 pos)
+        {
+            type = WebsocketMessageType.Position;
+            SetGuid(id.ToString());
+            position = pos;
+        }
+
+        public PositionMessage(string id, WebsocketServer.Vector3 pos)
+        {
+            type = WebsocketMessageType.Position;
+            SetGuid(id);
+            position = pos;
+        }
+
+        public static new PositionMessage FromJson(string target)
+        {
+            return JsonConvert.DeserializeObject<PositionMessage>(target);
+        }
+
+        public override string ToJson()
+        {
+            return JsonConvert.SerializeObject(this);
         }
     }
 

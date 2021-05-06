@@ -21,7 +21,8 @@ namespace WebsocketServer
             IDMessage temp = new IDMessage(newPlayer.guid.ToString());
             Console.WriteLine("New connection. Returned ID: " + newPlayer.guid);
             Send(temp.ToJson());
-            Broadcast("Update"); // Ask every user to send an update on their position
+            WebsocketRequest req = new WebsocketRequest(WebsocketMessageType.Position);
+            Broadcast(req.ToJson()); // Ask every user to send an update on their position
         }
 
         protected override void OnMessage(MessageEventArgs e)
@@ -37,9 +38,9 @@ namespace WebsocketServer
 
         protected override void OnClose(CloseEventArgs e)
         {
-            PlayerList.Instance().RemoveEntry(connectionID);
-            string exitPosition = "Pos:" + (-9999) + "/" + (-9999) + "/" + (-9999) + "/" + connectionID;
-            Broadcast(exitPosition); // Tell every open connection to move the chracter to the exit position. It will be deleted after that.
+            Msg.PositionMessage temp = new Msg.PositionMessage(connectionID, new Vector3(-9999, -9999, -9999));
+            Broadcast(temp.ToJson()); // Tell every open connection to move the chracter to the exit position. It will be deleted after that.
+            Console.WriteLine("Closing connection with " + connectionID);
             base.OnClose(e);
         }
 

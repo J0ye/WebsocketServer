@@ -7,7 +7,7 @@ using WebsocketServer.Models;
 
 namespace WebsocketServer
 {
-    public class Vector3 : BaseModel
+    public class Vector3
     {
         public float x = 0;
         public float y = 0;
