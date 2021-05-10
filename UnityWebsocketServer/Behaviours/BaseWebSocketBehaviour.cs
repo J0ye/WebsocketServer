@@ -21,7 +21,7 @@ namespace WebsocketServer
             IDMessage temp = new IDMessage(newPlayer.guid.ToString());
             Console.WriteLine("New connection. Returned ID: " + newPlayer.guid);
             Send(temp.ToJson());
-            WebsocketRequest req = new WebsocketRequest(WebsocketMessageType.Position);
+            WebsocketRequest req = new WebsocketRequest(WebsocketMessageType.Position, connectionID);
             Broadcast(req.ToJson()); // Ask every user to send an update on their position
         }
 
