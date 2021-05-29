@@ -26,13 +26,13 @@ namespace Msg
 
         public WebsocketRequest()
         {
-            guid = Guid.NewGuid().ToString();
+            connectionID = Guid.NewGuid().ToString();
             type = WebsocketMessageType.Request;
         }
 
         public WebsocketRequest(WebsocketMessageType request, Guid id)
         {
-            guid = id.ToString();
+            connectionID = id.ToString();
             type = WebsocketMessageType.Request;
             requestType = request;
         }
@@ -50,7 +50,7 @@ namespace Msg
 
     public class IDMessage : WebsocketMessage
     {
-        public string guid;
+        public string connectionID;
 
         public IDMessage()
         {
@@ -79,7 +79,7 @@ namespace Msg
         {
             if (Guid.TryParse(target, out Guid temp))
             {
-                guid = target;
+                connectionID = target;
             }
             else
             {
@@ -133,7 +133,7 @@ namespace Msg
                 throw new Exception("Script is trying to create a SyncVarMessage for " + callName + " without the proper type");
 
             this.type = targetType;
-            this.guid = id.ToString();
+            this.connectionID = id.ToString();
             this.callName = callName;
             this.stringValue = stringValue;
             this.floatValue = floatValue;
