@@ -1,75 +1,52 @@
 ﻿using System;
 using WebSocketSharp;
 using WebSocketSharp.Server;
-using WebsocketServer.Models;
 using WebsocketServer;
 using System.Security.Cryptography.X509Certificates;
-
-namespace Example
-{
-    public class Echo : WebSocketBehavior
+     
+/// <summary>
+/// Contains the Main methode, which start the server instances 
+/// </summary>
+public class Program
+{       
+    public static void Main(string[] args)
     {
-        protected override void OnMessage(MessageEventArgs e)
+        // Create a websocket server for secure connections 
+        var wssv = new WebSocketServer(9000, true);
+        // Create a websocket server for native implementations that dont need a secure connection
+        var wsv = new WebSocketServer(9001);
+
+        // Add the SSL configuration to the secure websocket server
+        wssv.SslConfiguration.ServerCertificate = new X509Certificate2("cert.pks");
+        wssv.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
+        wssv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
+        wssv.AddWebSocketService<ChatBehaviour>("/chat");
+        wsv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
+        wsv.AddWebSocketService<ChatBehaviour>("/chat");
+
+        // extra channels that are all based on the basebehaviour. Add an instance for bot variants of the websocket server.
+        wssv.AddWebSocketService<BaseWebSocketBehaviour>("/alpha");
+        wsv.AddWebSocketService<BaseWebSocketBehaviour>("/alpha");
+        wssv.AddWebSocketService<BaseWebSocketBehaviour>("/beta");
+        wsv.AddWebSocketService<BaseWebSocketBehaviour>("/beta");
+        wssv.AddWebSocketService<BaseWebSocketBehaviour>("/gamma");
+        wsv.AddWebSocketService<BaseWebSocketBehaviour>("/gamma");
+        wssv.AddWebSocketService<BaseWebSocketBehaviour>("/delta");
+        wsv.AddWebSocketService<BaseWebSocketBehaviour>("/delta");
+        wssv.AddWebSocketService<BaseWebSocketBehaviour>("/omega");
+        wsv.AddWebSocketService<BaseWebSocketBehaviour>("/omega");
+
+        Console.WriteLine("Server started");
+        Console.WriteLine(".Net Version: {0}", Environment.Version.ToString());
+        Console.WriteLine("Running 6 servers on port:" + wssv.Port);
+
+        wsv.Start();
+        wssv.Start();
+        if (Console.ReadKey().Key == ConsoleKey.Enter)
         {
-            var msg = System.Text.Encoding.UTF8.GetString(e.RawData);
-            Console.WriteLine("Got Message: " + msg + ". Returing raw");
-            string response = msg;
-            Send(e.RawData);
-        }
-    }
-    
-    
-    public class Program
-    {        
-        /*private enum SslProtocolsHack
-        {
-            Tls = 192,
-            Tls11 = 768,
-            Tls12 = 3072
-        }*/
-
-        public static void Main(string[] args)
-        {
-            var wssv = new WebSocketServer(9000, true);
-            var wsv = new WebSocketServer(9001);
-
-
-            wssv.SslConfiguration.ServerCertificate =
-                new X509Certificate2("cert.pks");
-            //var sslProtocolHack = (System.Security.Authentication.SslProtocols)(SslProtocolsHack.Tls12 | SslProtocolsHack.Tls11 | SslProtocolsHack.Tls);
-            wssv.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
-            wssv.AddWebSocketService<_2DMp>("/2dmp");
-            wssv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
-            wssv.AddWebSocketService<Echo>("/echo");
-            wssv.AddWebSocketService<ChatBehaviour>("/chat");
-            wsv.AddWebSocketService<BaseWebSocketBehaviour>("/base");
-            wsv.AddWebSocketService<Echo>("/echo");
-            wsv.AddWebSocketService<ChatBehaviour>("/chat");
-
-            wssv.AddWebSocketService<ScoreBehaviour>("/score");
-            wsv.AddWebSocketService<ScoreBehaviour>("/score");
-
-            new PlayerList();
-            new ScoreList();
-            Console.WriteLine("Server started");
-            Console.WriteLine(".Net Version: {0}", Environment.Version.ToString());
-            Console.WriteLine("Press any to stop");
-            Console.WriteLine("Add legacy scores");
-            ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "The Creator", 2017));
-            ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "st311", 1918));
-            ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "Cesd", 1018));
-            ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "felix", 1001));
-            ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "Frogman", 798));
-            ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "maggy", 420));
-            ScoreList.Instance().AddEntry(new Score(Guid.NewGuid(), "Nice", 69));
-
-            wsv.Start();
-            wssv.Start();
-            if (Console.ReadKey().Key == ConsoleKey.Enter)
-            {
-                wssv.Stop();
-                wsv.Stop();
-            }
+            // Shut the server down, if a button has been pressed
+            wssv.Stop();
+            wsv.Stop();
         }
     }
 }

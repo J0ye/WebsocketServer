@@ -18,7 +18,7 @@ namespace WebsocketServer
             return instance;
         }
 
-        // global data
+        // global data of members in chat
         public int g_ChatMember = 0;
     }
 }

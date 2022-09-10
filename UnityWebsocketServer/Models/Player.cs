@@ -3,32 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebsocketServer.Models;
 
 namespace WebsocketServer
 {
+    /// <summary>
+    /// Base for all models that implements an id as a guid to adress models to open connections. 
+    /// </summary>
+    public class BaseModel
+    {
+        public Guid guid;
+    }
+
+    /// <summary>
+    /// Model used to create lists of users and positions.
+    /// </summary>
     public class Player : BaseModel
     {
-        public Vector3 pos;
+        public Vector3 position;
 
         public Player()
         {
             guid = Guid.NewGuid();
-            pos = new Vector3();
+            position = new Vector3();
         }
 
-        public void SetPos(float x, float y, float z)
+        public void SetPosition(float x, float y, float z)
         {
-            pos.x = x;
-            pos.y = y;
-            pos.z = z;
-        }
-
-        public string GetPlayerAsString()
-        {
-            string _id = guid.ToString();
-            string _pos = pos.x + "/" + pos.y + "/" + pos.z;
-            return _id + "!" + _pos;
+            position.x = x;
+            position.y = y;
+            position.z = z;
         }
     }
 }

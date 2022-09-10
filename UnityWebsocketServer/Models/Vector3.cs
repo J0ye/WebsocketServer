@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebsocketServer.Models;
 
 namespace WebsocketServer
 {
+    /// <summary>
+    /// Simple version of a 3D vector used to create the position messages.
+    /// </summary>
     public class Vector3
     {
         public float x = 0;
